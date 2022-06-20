@@ -10,7 +10,7 @@ root.configure(background='#DDC9FF')
 maincolor='#DDC9FF'
 
 #row-config
-root.columnconfigure(1,weight=10)
+root.columnconfigure(1,weight=1)
 root.rowconfigure(0,weight=1)
 
 #image
