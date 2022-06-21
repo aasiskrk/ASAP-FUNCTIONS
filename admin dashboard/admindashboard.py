@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
     
 root = Tk()
@@ -91,7 +93,7 @@ fm1.grid(row=0,column=0)
 fm2=Frame(frame1,width=350,height=200)
 fm2.grid(row=0,column=1,padx=(10,0))
 
-fm3=Frame(frame1,width=1159,height=260)
+fm3=Frame(frame1,width=1159,height=260,background='white')
 fm3.grid(row=1,column=0,columnspan=2,pady=10)
 
 fm4=Frame(frame1,width=800,height=200)
@@ -101,10 +103,20 @@ fm5=Frame(frame1,width=350,height=200)
 fm5.grid(row=2,column=1,padx=(10,0))
 
 
+#plot
+plt.style.use('seaborn-dark')
+x=[2,3,5,6,7,8,5,4,7,9,5]
+y=[3,5,7,8,3,6,7,8,3,5,6]
+fig=plt.figure(figsize=(11.6,2.5))
+fig.tight_layout()
+ax1=fig.add_subplot(1,1,1)
+ax1.plot(x,y)
+canvas = FigureCanvasTkAgg(fig, master=fm3) 
+canvas.get_tk_widget().pack(expand=True)
+canvas.draw()
 
 
-
-
+ 
 
 
 
