@@ -30,5 +30,3 @@ c.execute("""CREATE TABLE CHECKOUT(
 
 )""")
 conn.commit()
-
-#hello
