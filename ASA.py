@@ -24,7 +24,7 @@ c = conn.cursor()
    
 
 
-# # )""")
+# )""")
 
 
 delete_box = Entry(root,width=30)
@@ -78,7 +78,7 @@ def submit():
  
     c = conn.cursor() 
 
-    c.execute("INSERT INTO Checkout VALUES (:SN, :Name, :Particulars,:Rate,:Amount)",{
+    c.execute("INSERT INTO Checkout VALUES (:SN, :Name, :Particulars,:Quantity,:Rate,:Amount)",{
         'SN':SN.get(),
         'Name':Name.get(),
         'Particulars':Particulars.get(),
