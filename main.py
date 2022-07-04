@@ -20,8 +20,8 @@ root.maxsize(width=1920,height=1080)
 tabs= ttk.Notebook(root)
 tabs.pack()
 
-mainframe= Frame(tabs,width=1920,height=1080,bg="#514C4C")
-records_frame= Frame(tabs,width=1920,height=1080,bg="#514D4D")
+mainframe= Frame(tabs,width=1920,height=1080,bg="#D9D9D9")
+records_frame= Frame(tabs,width=1920,height=1080,bg="#D9D9D9")
 
 
 # bg=PhotoImage(file="background_ASAP.png")
@@ -34,25 +34,25 @@ records_frame.pack(fill=BOTH,expand=1)
 tabs.add(mainframe,text="Main")
 tabs.add(records_frame,text="Records")
 
-customer_detail_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=210,bg="#857A8E").place(x=60,y=30)
-customer_label= Label(mainframe,text="CUSTOMER DETAILS",font=20,border=1,relief=RAISED,fg="black",bg="#857A8E").place(x=64,y=33)
+customer_detail_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=210,bg="#DDC9FF").place(x=60,y=30)
+customer_label= Label(mainframe,text="CUSTOMER DETAILS",font=20,border=1,fg="black",bg="#DDC9FF").place(x=64,y=33)
 
-bill_no_label=Label(mainframe,text="Bill no.",font=7,bg="#857A8E").place(x=110,y=80)
-bill_no_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=85)
+bill_no_label=Label(mainframe,text="Bill no.",font=7,bg="#DDC9FF").place(x=110,y=80)
+bill_no_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=85,width=150,height=23)
 
-date_label=Label(mainframe,text="Transaction Date",font=7,bg="#857A8E").place(x=110,y=120)
-date_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=125)
+date_label=Label(mainframe,text="Transaction Date",font=7,bg="#DDC9FF").place(x=110,y=120)
+date_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=125,width=150,height=23)
 
-bill_to_label=Label(mainframe,text="Bill To",font=7,bg="#857A8E").place(x=110,y=160)
-bill_to_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=165)
+bill_to_label=Label(mainframe,text="Bill To",font=7,bg="#DDC9FF").place(x=110,y=160)
+bill_to_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=165,width=150,height=23)
 
-address_label=Label(mainframe,text="Address",font=7,bg="#857A8E").place(x=110,y=200)
-address_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=205)
+address_label=Label(mainframe,text="Address",font=7,bg="#DDC9FF").place(x=110,y=200)
+address_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=205,width=150,height=23)
 
 
 
-qrcode_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=210,bg="#857A8E").place(x=1050,y=30)
-qr_buttonl= Button(mainframe,text="QR CODE MODULE",font=20,border=1,relief=RAISED,fg="black",bg="#857A8E").place(x=1175,y=130)
+# qrcode_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=210,bg="#857A8E").place(x=1050,y=30)
+qr_buttonl= Button(mainframe,text="QR CODE MODULE",borderwidth=2,relief=SOLID,fg="black",bg="#857A8E",width=59,height=13).place(x=1050,y=30)
 
 item_details_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=490,bg="#857A8E").place(x=60,y=260)
 item_label= Label(mainframe,text="ITEM DETAILS",font=20,border=1,relief=RAISED,fg="black",bg="#857A8E").place(x=64,y=263)
@@ -83,28 +83,28 @@ insert_item_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=2
 insert_item_label= Label(mainframe,text="INSERT ITEM DETAILS",font=20,border=1,relief=RAISED,fg="black",bg="#857A8E").place(x=1053,y=263)
 
 item_name_label=Label(mainframe,text="Item Name",font=7,bg="#857A8E").place(x=1100,y=300)
-item_name_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=305)
+item_name_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=305,width=150,height=23)
 
 quantity_label=Label(mainframe,text="Quantity",font=7,bg="#857A8E").place(x=1100,y=330)
-quantity_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=335)
+quantity_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=335,width=150,height=23)
 
 rate_label=Label(mainframe,text="Rate",font=7,bg="#857A8E").place(x=1100,y=360)
-rate_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=365)
+rate_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=365,width=150,height=23)
 
 discount_label=Label(mainframe,text="Discount",font=7,bg="#857A8E").place(x=1100,y=390)
-discount_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=395)
+discount_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=395,width=150,height=23)
 
 add_item_btn= Button(mainframe,text="Add Item",font=5).place(x=1300,y=440)
-edit_item_btn= Button(mainframe,text="Edit Item",font=5).place(x=1300,y=480)
+edit_item_btn= Button(mainframe,text="Edit Item",font=5).place(x=1300,y=480,width=150,height=23)
 
 
 print_frame=Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=210,bg="#857A8E").place(x=1050,y=540)
 tender_label=Label(mainframe,text="Tender",font=7,bg="#857A8E").place(x=1100,y=560)
-tender_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=565)
+tender_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=565,width=150,height=23)
 
 payment_options=["Cash","Card"]
 payment_option_label= Label(mainframe,text="Payment Option",font=7,bg="#857A8E").place(x=1100,y=605 )
-payment_combo= ttk.Combobox(mainframe,value=payment_options,width=27).place(x=1250,y=610)
+payment_combo= ttk.Combobox(mainframe,value=payment_options,width=27).place(x=1250,y=610,width=150,height=23)
 
 store_invoice_button = Button(mainframe,text="STORE INVOICE",font= 15).place(x=1090,y=680)
 
