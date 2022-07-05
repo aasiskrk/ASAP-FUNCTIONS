@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter import font
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -43,7 +44,7 @@ frame2 = Frame(root)
 frame3 = Frame(root)
 frame4 = Frame(root)
 frame5 = Frame(root)
-btnframe = Frame(root)
+btnframe = Frame(root,background=maincolor)
 btnframe.grid(row=0,column=0,sticky=N)
 
 #frame placement
@@ -76,24 +77,21 @@ frame2_title.pack(fill='both', expand=True)
 show_frame(frame1)
 
 #buttons
-frame1_btn = Button(btnframe,activebackground=maincolor,width=30,border=0,bg=maincolor, text='  Dashboard',compound=LEFT,image=dashImg,command=lambda:show_frame(frame1))
-frame1_btn.pack(fill='x', ipady=15,ipadx=70)
+frame1_btn = Button(btnframe,activebackground=maincolor,width=30,border=0,bg=maincolor, text='  Dashboard',font='{tw cen mt}',compound=LEFT,image=dashImg,command=lambda:show_frame(frame1),cursor='hand2')
+frame1_btn.pack(fill='x', ipady=15,ipadx=70,pady=(10,5))
 
 
-frame2_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Products',compound=LEFT,image=prodImg,command=lambda:show_frame(frame2))
-frame2_btn.pack(fill='x', ipady=15)
+frame2_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='  Products      ',font='{tw cen mt}',compound=LEFT,image=prodImg,command=lambda:show_frame(frame2),cursor='hand2')
+frame2_btn.pack(fill='x', ipady=15,pady=5)
 
-frame3_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Bills',compound=LEFT,image=billImg,command=lambda:show_frame(frame3))
-frame3_btn.pack(fill='x', ipady=15)
+frame3_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='   Bills            ',font='{tw cen mt}',compound=LEFT,image=billImg,command=lambda:show_frame(frame3),cursor='hand2')
+frame3_btn.pack(fill='x', ipady=15,pady=5)
 
-frame4_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Users',compound=LEFT,image=profImg,command=lambda:show_frame(frame4))
-frame4_btn.pack(fill='x', ipady=15)
+frame4_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='   Users         ',font='{tw cen mt}',compound=LEFT,image=profImg,command=lambda:show_frame(frame4),cursor='hand2')
+frame4_btn.pack(fill='x', ipady=15,pady=5)
 
-frame5_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Settings',compound=LEFT,image=setImg,command=lambda:show_frame(frame5))
-frame5_btn.pack(fill='x', ipady=15)
-
-frame6_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Signout',command=signout)
-frame6_btn.pack(fill='x', ipady=15)
+frame5_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='  Settings      ',font='{tw cen mt}',compound=LEFT,image=setImg,command=lambda:show_frame(frame5),cursor='hand2')
+frame5_btn.pack(fill='x', ipady=15,pady=5)
 
 #frame1
 fm1=Frame(frame1,width=800,height=200)
