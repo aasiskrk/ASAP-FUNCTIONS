@@ -37,17 +37,17 @@ tabs.add(records_frame,text="Records")
 customer_detail_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=210,bg="#DDC9FF").place(x=60,y=30)
 customer_label= Label(mainframe,text="CUSTOMER DETAILS",font=20,border=1,fg="black",bg="#DDC9FF").place(x=64,y=33)
 
-bill_no_label=Label(mainframe,text="Bill no.",font=7,bg="#DDC9FF").place(x=110,y=80)
+bill_no_label=Label(mainframe,text="Bill no.",font=7,bg="#DDC9FF").place(x=105,y=80)
 bill_no_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=85,width=150,height=23)
 
-date_label=Label(mainframe,text="Transaction Date",font=7,bg="#DDC9FF").place(x=110,y=120)
-date_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=125,width=150,height=23)
+date_label=Label(mainframe,text="Transaction Date",font=7,bg="#DDC9FF").place(x=105,y=110)
+date_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=115,width=150,height=23)
 
-bill_to_label=Label(mainframe,text="Bill To",font=7,bg="#DDC9FF").place(x=110,y=160)
-bill_to_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=165,width=150,height=23)
+bill_to_label=Label(mainframe,text="Bill To",font=7,bg="#DDC9FF").place(x=105,y=140)
+bill_to_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=145,width=150,height=23)
 
-address_label=Label(mainframe,text="Address",font=7,bg="#DDC9FF").place(x=110,y=200)
-address_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=205,width=150,height=23)
+address_label=Label(mainframe,text="Address",font=7,bg="#DDC9FF").place(x=105,y=170)
+address_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=175,width=150,height=23)
 
 
 
@@ -55,7 +55,7 @@ address_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=205,width=15
 qr_buttonl= Button(mainframe,text="QR CODE MODULE",borderwidth=2,relief=SOLID,fg="black",bg="#857A8E",width=59,height=13).place(x=1050,y=30)
 
 item_details_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=490,bg="#DDC9FF").place(x=60,y=260)
-item_label= Label(mainframe,text="ITEM DETAILS",font=20,border=1,relief=RAISED,fg="black",bg="#DDC9FF").place(x=64,y=263)
+item_label= Label(mainframe,text="ITEM DETAILS",font=20,border=1,fg="black",bg="#DDC9FF").place(x=64,y=263)
 
 
 # my_tree=ttk.Treeview(mainframe)
@@ -80,7 +80,7 @@ item_label= Label(mainframe,text="ITEM DETAILS",font=20,border=1,relief=RAISED,f
 
 
 insert_item_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=270,bg="#DDC9FF").place(x=1050,y=260)
-insert_item_label= Label(mainframe,text="INSERT ITEM DETAILS",font=20,border=1,relief=RAISED,fg="black",bg="#DDC9FF").place(x=1053,y=263)
+insert_item_label= Label(mainframe,text="INSERT ITEM DETAILS",font=20,border=1,fg="black",bg="#DDC9FF").place(x=1053,y=263)
 
 item_name_label=Label(mainframe,text="Item Name",font=7,bg="#DDC9FF").place(x=1100,y=300)
 item_name_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=305,width=150,height=23)
@@ -95,7 +95,7 @@ discount_label=Label(mainframe,text="Discount",font=7,bg="#DDC9FF").place(x=1100
 discount_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=395,width=150,height=23)
 
 add_item_btn= Button(mainframe,text="Add Item",font=5).place(x=1300,y=440)
-edit_item_btn= Button(mainframe,text="Edit Item",font=5).place(x=1300,y=480,width=150,height=23)
+edit_item_btn= Button(mainframe,text="Edit Item",font=5).place(x=1300,y=480)
 
 
 print_frame=Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=210,bg="#DDC9FF").place(x=1050,y=540)
