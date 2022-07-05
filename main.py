@@ -104,7 +104,9 @@ tender_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=565,width=15
 
 payment_options=["Cash","Card"]
 payment_option_label= Label(mainframe,text="Payment Option",font=7,bg="#DDC9FF").place(x=1100,y=605 )
-payment_combo= ttk.Combobox(mainframe,value=payment_options,width=27).place(x=1250,y=610,width=150,height=23)
+payment_combo= ttk.Combobox(mainframe,value=payment_options,width=27)
+payment_combo.current(0)
+payment_combo.place(x=1250,y=610,width=150,height=23)
 
 store_invoice_button = Button(mainframe,text="STORE INVOICE",font= 15).place(x=1090,y=680)
 
