@@ -14,14 +14,22 @@ maincolor='#DDC9FF'
 
 #row-config
 root.columnconfigure(1,weight=1)
+root.columnconfigure(0,weight=2)
 root.rowconfigure(0,weight=1)
 
 #image
 img=PhotoImage(file='F:/tkn/ASAP/admin dashboard/bard.png')
+dashImg=PhotoImage(file='home.png')
+prodImg=PhotoImage(file='cart.png')
+billImg=PhotoImage(file='bills.png')
+profImg=PhotoImage(file='profile.png')
+setImg=PhotoImage(file='settings.png')
 
 #tab-commands
-def show_frame(frame): 
+def show_frame(frame):
     frame.tkraise()
+    
+
 
 def signout():
     exitApp=messagebox.askquestion('signout','Do you reallllllly want to signout?',icon='warning',default='no')
@@ -42,7 +50,8 @@ btnframe.grid(row=0,column=0,sticky=N)
 for frame in (frame1, frame2, frame3, frame4, frame5):
     frame.grid(row=0,column=1,sticky='nsew',pady=10,padx=10)
     
-#dashboard-frames
+
+# #dashboard-frames
 # frame1_title=  Label(frame1, font='times 35', bg='red')
 # frame1_title.pack(expand=True)
 
@@ -67,20 +76,20 @@ frame2_title.pack(fill='both', expand=True)
 show_frame(frame1)
 
 #buttons
-frame1_btn = Button(btnframe,activebackground=maincolor,width=30,border=0,bg=maincolor, text='Dashboard',compound=CENTER,command=lambda:show_frame(frame1))
-frame1_btn.pack(fill='x', ipady=15)
+frame1_btn = Button(btnframe,activebackground=maincolor,width=30,border=0,bg=maincolor, text='  Dashboard',compound=LEFT,image=dashImg,command=lambda:show_frame(frame1))
+frame1_btn.pack(fill='x', ipady=15,ipadx=70)
 
 
-frame2_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Products',command=lambda:show_frame(frame2))
+frame2_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Products',compound=LEFT,image=prodImg,command=lambda:show_frame(frame2))
 frame2_btn.pack(fill='x', ipady=15)
 
-frame3_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Bills',command=lambda:show_frame(frame3))
+frame3_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Bills',compound=LEFT,image=billImg,command=lambda:show_frame(frame3))
 frame3_btn.pack(fill='x', ipady=15)
 
-frame4_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Users',command=lambda:show_frame(frame4))
+frame4_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Users',compound=LEFT,image=profImg,command=lambda:show_frame(frame4))
 frame4_btn.pack(fill='x', ipady=15)
 
-frame5_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Settings',command=lambda:show_frame(frame5))
+frame5_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Settings',compound=LEFT,image=setImg,command=lambda:show_frame(frame5))
 frame5_btn.pack(fill='x', ipady=15)
 
 frame6_btn = Button(btnframe,activebackground=maincolor,border=0,bg=maincolor, text='Signout',command=signout)
@@ -114,6 +123,8 @@ ax1.plot(x,y)
 canvas = FigureCanvasTkAgg(fig, master=fm3) 
 canvas.get_tk_widget().pack(expand=True)
 canvas.draw()
+
+
 
 
 
