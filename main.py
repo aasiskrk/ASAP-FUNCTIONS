@@ -54,8 +54,8 @@ address_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=205,width=15
 # qrcode_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=210,bg="#857A8E").place(x=1050,y=30)
 qr_buttonl= Button(mainframe,text="QR CODE MODULE",borderwidth=2,relief=SOLID,fg="black",bg="#857A8E",width=59,height=13).place(x=1050,y=30)
 
-item_details_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=490,bg="#857A8E").place(x=60,y=260)
-item_label= Label(mainframe,text="ITEM DETAILS",font=20,border=1,relief=RAISED,fg="black",bg="#857A8E").place(x=64,y=263)
+item_details_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=490,bg="#DDC9FF").place(x=60,y=260)
+item_label= Label(mainframe,text="ITEM DETAILS",font=20,border=1,relief=RAISED,fg="black",bg="#DDC9FF").place(x=64,y=263)
 
 
 # my_tree=ttk.Treeview(mainframe)
@@ -79,31 +79,31 @@ item_label= Label(mainframe,text="ITEM DETAILS",font=20,border=1,relief=RAISED,f
 
 
 
-insert_item_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=270,bg="#857A8E").place(x=1050,y=260)
-insert_item_label= Label(mainframe,text="INSERT ITEM DETAILS",font=20,border=1,relief=RAISED,fg="black",bg="#857A8E").place(x=1053,y=263)
+insert_item_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=270,bg="#DDC9FF").place(x=1050,y=260)
+insert_item_label= Label(mainframe,text="INSERT ITEM DETAILS",font=20,border=1,relief=RAISED,fg="black",bg="#DDC9FF").place(x=1053,y=263)
 
-item_name_label=Label(mainframe,text="Item Name",font=7,bg="#857A8E").place(x=1100,y=300)
+item_name_label=Label(mainframe,text="Item Name",font=7,bg="#DDC9FF").place(x=1100,y=300)
 item_name_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=305,width=150,height=23)
 
-quantity_label=Label(mainframe,text="Quantity",font=7,bg="#857A8E").place(x=1100,y=330)
+quantity_label=Label(mainframe,text="Quantity",font=7,bg="#DDC9FF").place(x=1100,y=330)
 quantity_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=335,width=150,height=23)
 
-rate_label=Label(mainframe,text="Rate",font=7,bg="#857A8E").place(x=1100,y=360)
+rate_label=Label(mainframe,text="Rate",font=7,bg="#DDC9FF").place(x=1100,y=360)
 rate_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=365,width=150,height=23)
 
-discount_label=Label(mainframe,text="Discount",font=7,bg="#857A8E").place(x=1100,y=390)
+discount_label=Label(mainframe,text="Discount",font=7,bg="#DDC9FF").place(x=1100,y=390)
 discount_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=395,width=150,height=23)
 
 add_item_btn= Button(mainframe,text="Add Item",font=5).place(x=1300,y=440)
 edit_item_btn= Button(mainframe,text="Edit Item",font=5).place(x=1300,y=480,width=150,height=23)
 
 
-print_frame=Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=210,bg="#857A8E").place(x=1050,y=540)
-tender_label=Label(mainframe,text="Tender",font=7,bg="#857A8E").place(x=1100,y=560)
+print_frame=Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=210,bg="#DDC9FF").place(x=1050,y=540)
+tender_label=Label(mainframe,text="Tender",font=7,bg="#DDC9FF").place(x=1100,y=560)
 tender_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=565,width=150,height=23)
 
 payment_options=["Cash","Card"]
-payment_option_label= Label(mainframe,text="Payment Option",font=7,bg="#857A8E").place(x=1100,y=605 )
+payment_option_label= Label(mainframe,text="Payment Option",font=7,bg="#DDC9FF").place(x=1100,y=605 )
 payment_combo= ttk.Combobox(mainframe,value=payment_options,width=27).place(x=1250,y=610,width=150,height=23)
 
 store_invoice_button = Button(mainframe,text="STORE INVOICE",font= 15).place(x=1090,y=680)
@@ -111,9 +111,9 @@ store_invoice_button = Button(mainframe,text="STORE INVOICE",font= 15).place(x=1
 print_invoice_button = Button(mainframe,text="PRINT INVOICE",font= 15).place(x=1270,y=680)
 
 # payment_combo.bind("<<>>")
-past_inovice_label= Label(records_frame,text="Past Invoice History",font=20,border=1,relief=RAISED,fg="black",bg='#857A8E').place(x=680,y=0)
+past_inovice_label= Label(records_frame,text="Past Invoice History",font=20,border=1,relief=RAISED,fg="black",bg='#DDC9FF').place(x=680,y=0)
 
-crud_frame=Frame(records_frame,borderwidth=2,relief=SOLID,width=300,height=320,bg='#857A8E').place(x=1232,y=140)
+crud_frame=Frame(records_frame,borderwidth=2,relief=SOLID,width=300,height=320,bg='#DDC9FF').place(x=1232,y=140)
 
 access_invoice_button=Button(records_frame,text="Access Inovice",font=15).place(x=1320,y=200)
 delete_invoice_button=Button(records_frame,text="Delete Invoice",font=15).place(x=1322,y=250)
