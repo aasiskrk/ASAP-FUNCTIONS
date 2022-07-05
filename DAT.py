@@ -14,15 +14,15 @@ conn = sqlite3.connect("DATA.db")
 
 c = conn.cursor() 
 
-c.execute("""CREATE TABLE Check(
-    Invoice_ID text,
-    Customer_Name text,
-    Date timestamp,
-    Items text,  
-    Total_Amount integer,
-    Tender integer
+# c.execute("""CREATE TABLE INVOICE(
+#     Invoice_ID text,
+#     Customer_Name text,
+#     Date timestamp,
+#     Items text,  
+#     Total_Amount integer,
+#     Tender integer
    
-)""")
+# )""")
 
 
 delete_box = Entry(root,width=30)
@@ -76,7 +76,7 @@ def submit():
  
     c = conn.cursor() 
 
-    c.execute("INSERT INTO Check VALUES (:Invoice_ID, :Customer_Name, :Date,:Items,:Total_Amount,:Tender)",{
+    c.execute("INSERT INTO INVOICE VALUES (:Invoice_ID, :Customer_Name, :Date,:Items,:Total_Amount,:Tender)",{
         'Invoice_ID':Invoice_ID.get(),
         'Customer_Name':Customer_Name.get(),
         'Date':Date.get(),
@@ -84,7 +84,7 @@ def submit():
         'Total_Amount':Total_Amount.get(),
         'Tender':Tender.get()
     })
-    messagebox.showinfo("Check", "insterted successfully")
+    messagebox.showinfo("INVOICE", "insterted successfully")
 
     Invoice_ID.delete(0,END)
     Customer_Name.delete(0,END)
@@ -99,7 +99,7 @@ def submit():
 def query():
     conn= sqlite3.connect("DATA.db")
     c = conn.cursor()
-    c.execute("SELECT *,oid FROM Check")
+    c.execute("SELECT *,oid FROM INVOICE")
 
     records = c.fetchall()
     print(records)
@@ -114,7 +114,7 @@ def query():
 def delete():
     conn= sqlite3.connect("DATA.db")
     c = conn.cursor()
-    c.execute("DELETE from Check WHERE oid ="+ delete_box.get())
+    c.execute("DELETE from INVOICE WHERE oid ="+ delete_box.get())
     print("deleted successfully")
     conn.commit()
     conn.close()
@@ -124,7 +124,7 @@ def update():
     c=conn.cursor()
     record_id=delete_box.get()
         
-    c.execute("""UPDATE Check SET
+    c.execute("""UPDATE INVOICE SET
     Invoice_ID=:Invoice_ID,
     Customer_Name=:Customer_Name,
     Date=:Date,
@@ -168,7 +168,7 @@ def edit():
     conn=sqlite3.connect("DATA.db")
     c= conn.cursor()
     record_id=delete_box.get()
-    c.execute("SELECT * FROM Check WHERE oid="+record_id)
+    c.execute("SELECT * FROM INVOICE WHERE oid="+record_id)
     records=c.fetchall()
 
 
