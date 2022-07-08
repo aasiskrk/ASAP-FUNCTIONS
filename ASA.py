@@ -76,12 +76,12 @@ def submit():
     })
     messagebox.showinfo("Checkout", "insterted successfully")
 
-    # SN.delete(0,END)
-    # Name.delete(0,END)
-    # Particulars.delete(0,END)
-    # Quantity.delete(0,END)
-    # Rate.delete(0,END)
-    # Amount.delete(0,END)
+    SN.delete(0,END)
+    Name.delete(0,END)
+    Particulars.delete(0,END)
+    Quantity.delete(0,END)
+    Rate.delete(0,END)
+    Amount.delete(0,END)
 
     conn.commit()
     conn.close()
