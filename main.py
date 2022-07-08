@@ -1,12 +1,7 @@
-
 from tkinter import *
 from tkinter import ttk
 
-
-
-
-
-
+#basic tkinter modification
 root = Tk()
 root.title("ASAP")
 root.state('zoomed')
@@ -16,7 +11,9 @@ root.geometry("1920x1080")
 root.minsize(width=500,height=500)
 root.maxsize(width=1920,height=1080)
 
+#tabs part
 
+#Main tab elements
 tabs= ttk.Notebook(root)
 tabs.pack()
 
@@ -34,6 +31,7 @@ records_frame.pack(fill=BOTH,expand=1)
 tabs.add(mainframe,text="Main")
 tabs.add(records_frame,text="Records")
 
+#Elements inside tab
 customer_detail_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=210,bg="#DDC9FF").place(x=60,y=30)
 customer_label= Label(mainframe,text="CUSTOMER DETAILS",font=20,border=1,fg="black",bg="#DDC9FF").place(x=64,y=33)
 
@@ -113,6 +111,9 @@ store_invoice_button = Button(mainframe,text="STORE INVOICE",font= 15).place(x=1
 print_invoice_button = Button(mainframe,text="PRINT INVOICE",font= 15).place(x=1270,y=680)
 
 # payment_combo.bind("<<>>")
+
+#record tab elements
+
 past_inovice_label= Label(records_frame,text="Past Invoice History",font=20,border=1,relief=RAISED,fg="black",bg='#DDC9FF').place(x=680,y=0)
 
 crud_frame=Frame(records_frame,borderwidth=2,relief=SOLID,width=300,height=320,bg='#DDC9FF').place(x=1232,y=140)
