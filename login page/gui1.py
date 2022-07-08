@@ -1,8 +1,7 @@
-
-
 from tkinter import *
-from turtle import width
 from PIL import Image,ImageTk
+import sqlite3 as sq
+
 
 #initial setup
 root=Tk()
@@ -87,7 +86,25 @@ btn1.grid(row=6,column=0,pady=(5,10))
 
 
 
+#login verifacationdef login1():
 
+
+def login1():
+    cen=sq.connect('game.db')
+    c=cen.cursor()
+    c.execute('select *,oid from Usersd')
+    record=c.fetchall()
+    for i in range(len(record)):
+        if record[i][0]==userData.get():
+            if record[i][1]==passData.get():
+                print('hello mister')
+            else:
+                print('wrong pass')
+        else:
+            print('dumdum')
+
+    cen.commit()
+    cen.close
 
 
 
