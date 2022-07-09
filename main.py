@@ -56,24 +56,24 @@ item_details_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=
 item_label= Label(mainframe,text="ITEM DETAILS",font=20,border=1,fg="black",bg="#DDC9FF").place(x=64,y=263)
 
 
-# my_tree=ttk.Treeview(mainframe)
-# my_tree['columns']=("S.N","Particulars","Quality","Rate","Amount")
-# my_tree.column("#0",width=120,minwidth=90)
-# my_tree.column("S.N",anchor=W,width=20)
-# my_tree.column("Particulars",anchor=CENTER,width=80)
-# my_tree.column("Quality",anchor=W,width=120)
-# my_tree.column("Rate",anchor=W,width=50)
-# my_tree.column("Amount",anchor=E,width=90)
+my_tree=ttk.Treeview(mainframe)
+my_tree['columns']=("S.N","Particulars","Quality","Rate","Amount")
+my_tree.column("#0",width=120,minwidth=90)
+my_tree.column("S.N",anchor=W,width=20)
+my_tree.column("Particulars",anchor=CENTER,width=80)
+my_tree.column("Quality",anchor=W,width=120)
+my_tree.column("Rate",anchor=W,width=50)
+my_tree.column("Amount",anchor=E,width=90)
 
-# my_tree.heading("#0",text="Name",anchor=W)
-# my_tree.heading("S.N",text="S.N",anchor=W)
-# my_tree.heading("Particulars",text="Particulars",anchor=CENTER)
-# my_tree.heading("Quality",text="Quality",anchor=W)
-# my_tree.heading("Rate",text="Rate",anchor=W)
-# my_tree.heading("Amount",text="Amount",anchor=E)
+my_tree.heading("#0",text="Name",anchor=W)
+my_tree.heading("S.N",text="S.N",anchor=W)
+my_tree.heading("Particulars",text="Particulars",anchor=CENTER)
+my_tree.heading("Quality",text="Quality",anchor=W)
+my_tree.heading("Rate",text="Rate",anchor=W)
+my_tree.heading("Amount",text="Amount",anchor=E)
 
-# my_tree.insert(parent='',index='end',iid=0,text="Abhilekh",values=(1,"Cupcake",2,40,80))
-# my_tree.place(x=70,y=270)
+my_tree.insert(parent='',index='end',iid=0,text="Name",values=(1,"Cupcake",2,40,80))
+my_tree.place(x=100,y=300)
 
 
 
