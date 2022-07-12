@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 
+
 #basic tkinter modification
 root = Tk()
 root.title("ASAP")
@@ -55,8 +56,20 @@ qr_buttonl= Button(mainframe,text="QR CODE MODULE",borderwidth=2,relief=SOLID,fg
 item_details_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=490,bg="#DDC9FF").place(x=60,y=260)
 item_label= Label(mainframe,text="ITEM DETAILS",font=20,border=1,fg="black",bg="#DDC9FF").place(x=64,y=263)
 
+#stylize the treeview
+style = ttk.Style()
+style.theme_use('default')
+style.configure("Treeview",background='#D3D3D3',foreground='black',rowheight=25,fieldbackground='#D3D3D3')
+style.map("Treeview",background=[('selected','#347083')])
 
-my_tree=ttk.Treeview(mainframe)
+#create treeviewframe
+tree_frame= Frame(mainframe,width=900,height=330).place(x=85,y=300)
+#scrollbar for treeview
+tree_scroll=Scrollbar(tree_frame).pack(side=RIGHT,fill=Y)
+
+my_tree=ttk.Treeview(tree_frame,yscrollcommand=tree_scroll.__setattr__, selectmode="extended").pack()
+
+tree_scroll.config(command=my_tree.yview)
 my_tree['columns']=("S.N","Particulars","Quality","Rate","Amount")
 my_tree.column("#0",width=120,minwidth=90)
 my_tree.column("S.N",anchor=W,width=20)
@@ -73,7 +86,7 @@ my_tree.heading("Rate",text="Rate",anchor=W)
 my_tree.heading("Amount",text="Amount",anchor=E)
 
 my_tree.insert(parent='',index='end',iid=0,text="Name",values=(1,"Cupcake",2,40,80))
-my_tree.place(x=100,y=300)
+
 
 
 
