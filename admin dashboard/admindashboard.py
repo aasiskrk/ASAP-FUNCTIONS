@@ -1,11 +1,10 @@
 from tkinter import colorchooser
 from tkinter import *
 from tkinter import messagebox
-from tkinter import font
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from pip import main
-from pyparsing import White
+from tkinter import ttk
+import sqlite3
 
 
 #colourvar
@@ -15,7 +14,8 @@ root = Tk()
 
 root.state('zoomed')
 root.title('ASAP-LOGIN V-1.0.0'.center(220))
-root.iconbitmap('Logo.ico')
+dir1='F:/tkn\ASAP/admin dashboard/'
+root.iconbitmap(dir1+'Logo.ico')
 root.configure(background=maincolor)
 
 #row-config
@@ -23,7 +23,6 @@ root.columnconfigure(1,weight=1)
 root.columnconfigure(0,weight=2)
 root.rowconfigure(0,weight=1)
 #image
-dir1='F:/tkn\ASAP/admin dashboard/'
 img=PhotoImage(file='F:/tkn/ASAP/admin dashboard/bard.png')
 dashImg=PhotoImage(file=dir1+'home.png')
 prodImg=PhotoImage(file=dir1+'cart.png')
@@ -102,8 +101,6 @@ frame2_title=  Label(frame3, font='times 35', bg='purple')
 frame2_title.pack(fill='both', expand=True)
 
 
-frame2_title=  Label(frame4, font='times 35', bg='blue')
-frame2_title.pack(fill='both', expand=True)
 
 
 
@@ -126,7 +123,7 @@ frame5_btn = Button(btnframe,relief='solid',activebackground=maincolor,border=0,
 frame5_btn.pack(fill='x', ipady=15,pady=6)
 
 
-show_frame(frame5,1)
+show_frame(frame1,1)
 #frame1
 fm1=Frame(frame1,width=800,height=200)
 fm1.grid(row=0,column=0)
@@ -160,6 +157,326 @@ canvas = FigureCanvasTkAgg(fig, master=fm3)
 canvas.get_tk_widget().pack(anchor=W)
 canvas.draw()
 
+#users
+conn = sqlite3.connect('asapDatabase.db')
+
+# Create a cursor instance
+c = conn.cursor()
+
+# Create Table
+c.execute("""CREATE TABLE if not exists userd(
+	first_name text,
+	last_name text,
+	username text,
+    address text,
+	password text)
+	""")
+# Add dummy data to table
+
+# for record in data:
+# 	c.execute("INSERT INTO userd VALUES (:first_name, :last_name, :username, :address,:password)", 
+# 		{
+# 		'first_name': record[0],
+# 		'last_name': record[1],
+# 		'username': record[2],
+# 		'address': record[3],
+#         'password': record[4]
+# 		}
+# 		)
+
+
+
+# Commit changes
+conn.commit()
+
+# Close our connection
+conn.close()
+
+def query_database():
+	# Create a database or connect to one that exists
+	conn = sqlite3.connect('F:/tkn/ASAP/admin dashboard/asapDatabase.db')
+
+	# Create a cursor instance
+	c = conn.cursor()
+
+	c.execute("SELECT *,oid FROM userd")
+	records = c.fetchall()
+	#print(records)
+	# Add our data to the screen
+	global count
+	count = 0
+
+	for record in records:
+		if count % 2 == 0:
+			my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4],record[5]), tags=('evenrow',))
+		else:
+			my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4],record[5]), tags=('oddrow',))
+		# increment counter
+		count += 1
+
+
+	# Commit changes
+	conn.commit()
+
+	# Close our connection
+	conn.close()
+
+
+
+# Add Some Style
+style = ttk.Style()
+
+# Pick A Theme
+style.theme_use('default')
+
+# Configure the Treeview Colors
+style.configure("Treeview",
+	background="#D3D3D3",
+	foreground="black",
+	rowheight=50,
+	fieldbackground="#D3D3D3",
+    font='{tw cen mt}')
+
+
+style.configure("Treeview.Heading", font=('{tw cen mt} 15'),
+    background='white',
+    border=2
+)
+# Change Selected Color
+style.map('Treeview',
+	background=[('selected', "#FF8080")])
+
+#frame for tt
+
+
+# Create a Treeview Frame
+tree_frame = Frame(frame4)
+tree_frame.grid(row=0,column=0,pady=(100,0),padx=(50,10))
+
+# Create a Treeview Scrollbar
+tree_scroll = Scrollbar(tree_frame)
+tree_scroll.pack(side=RIGHT, fill=Y)
+
+# Create The Treeview
+my_tree = ttk.Treeview(tree_frame, yscrollcommand=tree_scroll.set, selectmode="extended")
+my_tree.pack()
+
+# Configure the Scrollbar
+tree_scroll.config(command=my_tree.yview)
+
+# Define Our Columns
+my_tree['columns'] = ("First Name", "Last Name", "Username", "Address")
+
+# Format Our Columns
+my_tree.column("#0", width=0, stretch=NO)
+my_tree.column("First Name", anchor=W, width=250)
+my_tree.column("Last Name", anchor=W, width=250)
+my_tree.column("Username", anchor=CENTER, width=180)
+my_tree.column("Address", anchor=CENTER, width=180)
+
+
+
+# Create Headings
+my_tree.heading("#0", text="", anchor=W)
+my_tree.heading("First Name", text="First Name", anchor=W)
+my_tree.heading("Last Name", text="Last Name", anchor=W)
+my_tree.heading("Username", text="Username", anchor=CENTER)
+my_tree.heading("Address", text="Address", anchor=CENTER)
+
+
+
+# Create Striped Row Tags
+my_tree.tag_configure('oddrow', background="white")
+my_tree.tag_configure('evenrow', background=maincolor)
+
+
+# Remove all records
+def update_table():
+    for record in my_tree.get_children():
+        my_tree.delete(record)
+    query_database()
+
+
+
+# Update record
+def delete_record():
+    msg=messagebox.askquestion("Warning!!", "Are you sure you want to delete following user?",icon = 'warning')
+    print(msg)
+    if msg=='yes':
+	# Grab the record number
+        selected = my_tree.focus()
+        dosi = my_tree.item(selected,'values')
+        # ok=int(selected)+1
+        # print(dosi[5])
+        conn= sqlite3.connect('F:/tkn/ASAP/admin dashboard/asapDatabase.db')
+        c=conn.cursor()
+        c.execute('delete from userd where oid ='+dosi[5])
+        print('success','deleted')
+        conn.commit()
+        conn.close()
+        update_table()
+
+def update_users():
+    conn = sqlite3.connect('F:/tkn/ASAP/admin dashboard/asapDatabase.db')
+    selected = my_tree.focus()
+    dosi = my_tree.item(selected,'values')
+    c = conn.cursor()
+    c.execute('''UPDATE userd SET
+            first_name=:first_name,
+            last_name=:last_name,
+            username=:username,
+            address=:address,
+            password=:password
+            where oid=:oid''',
+            {'first_name':firstname_edit.get(),
+            'last_name':lastname_edit.get(),
+            'username':Username_edit.get(),
+            'address':address_edit.get(),
+            'password':password_edit.get(),
+            'oid':dosi[5]
+            }
+        )
+    conn.commit()
+    conn.close()
+    editor.destroy();update_table()
+
+
+def edit_user():
+    global editor
+    editor=Toplevel()
+    editor.title('Update data')
+    editor.geometry('300x400')
+
+    conn=sqlite3.connect('F:/tkn/ASAP/admin dashboard/asapDatabase.db')
+    c=conn.cursor()
+    selected = my_tree.focus()
+    dosi = my_tree.item(selected,'values')
+    c.execute("select * from userd where oid="+dosi[5])
+    records=c.fetchall()
+
+    global firstname_edit
+    global lastname_edit
+    global Username_edit
+    global address_edit
+    global password_edit
+
+
+    firstname_edit= Entry(editor, width=30)
+    firstname_edit.grid(row=1,column=1,padx=20,pady=5)
+
+    lastname_edit=Entry(editor,width=30)
+    lastname_edit.grid(row=2,column=1,pady=5)
+
+    Username_edit=Entry(editor,width=30)
+    Username_edit.grid(row=3,column=1,pady=5)
+
+    address_edit=Entry(editor,width=30)
+    address_edit.grid(row=4,column=1,pady=5)
+
+    password_edit=Entry(editor,width=30)
+    password_edit.grid(row=5,column=1,pady=5)
+
+    fnamelabel= Label(editor,text="firstname")
+    fnamelabel.grid(row=1,column=0)
+
+    lastnamelabel= Label(editor,text="lastname")
+    lastnamelabel.grid(row=2,column=0)
+
+    agelabel= Label(editor,text="Username")
+    agelabel.grid(row=3,column=0)
+
+    addresslabel= Label(editor,text="address")
+    addresslabel.grid(row=4,column=0)
+
+    passwordlabel= Label(editor,text="password")
+    passwordlabel.grid(row=5,column=0)
+
+
+    sub_btn=Button(editor,text='Submit',command=update_users)
+    sub_btn.grid(row=9,column=0,columnspan=2)
+    for record in records:
+        firstname_edit.insert(0,record[0])
+        lastname_edit.insert(0,record[1])
+        Username_edit.insert(0,record[2])
+        address_edit.insert(0,record[3])
+        password_edit.insert(0,record[4])
+
+
+    conn.commit()
+    conn.close()
+
+def add_user():
+    global editor
+    editor=Toplevel()
+    editor.title('add User')
+    editor.geometry('300x400')
+
+    global firstname_add
+    global lastname_add
+    global Username_add
+    global address_add
+    global password_add
+    firstname_add= Entry(editor, width=30)
+    firstname_add.grid(row=1,column=1,padx=20,pady=5)
+
+    lastname_add=Entry(editor,width=30)
+    lastname_add.grid(row=2,column=1,pady=5)
+
+    Username_add=Entry(editor,width=30)
+    Username_add.grid(row=3,column=1,pady=5)
+
+    address_add=Entry(editor,width=30)
+    address_add.grid(row=4,column=1,pady=5)
+
+    password_add=Entry(editor,width=30)
+    password_add.grid(row=5,column=1,pady=5)
+
+    fnamelabel= Label(editor,text="firstname")
+    fnamelabel.grid(row=1,column=0)
+
+    lastnamelabel= Label(editor,text="lastname")
+    lastnamelabel.grid(row=2,column=0)
+
+    agelabel= Label(editor,text="Username")
+    agelabel.grid(row=3,column=0)
+
+    addresslabel= Label(editor,text="address")
+    addresslabel.grid(row=4,column=0)
+
+    passwordlabel= Label(editor,text="password")
+    passwordlabel.grid(row=5,column=0);
+    
+    btn=Button(editor,text='add user',command=submit)
+    btn.grid(row=6,column=1)
+
+def submit():
+    conn= sqlite3.connect('F:/tkn/ASAP/admin dashboard/asapDatabase.db')
+    c=conn.cursor()
+    c.execute('''insert into userd values(:first_name,:last_name,:username,:address,:password)''',{'first_name':firstname_add.get(),'last_name':lastname_add.get(),'username':Username_add.get(),'address':address_add.get(),'password':password_add.get()}
+    )
+    messagebox.showinfo('success','Inserted sucessfully')
+            
+    conn.commit()
+    conn.close()
+    update_table()
+
+# Add Buttons
+button_frame = Frame(frame4)
+button_frame.grid(row=0,column=1)
+
+delete_user = Button(button_frame, text="Delete user", command=delete_record,relief="solid",bd=2,bg='#FF7676',font='{Tw cen mt} 13 ',width=19,height=2,activebackground='#FF7676',cursor='hand2')
+delete_user.grid(row=0, column=0, padx=10, pady=10)
+
+update_user = Button(button_frame, text="Update",command=edit_user,relief="solid",bd=2,bg='#FF7676',font='{Tw cen mt} 13 ',width=19,height=2,activebackground='#FF7676',cursor='hand2')
+update_user.grid(row=1, column=0, padx=10, pady=10)
+
+add_user = Button(button_frame, text="Add user",command=add_user,relief="solid",bd=2,bg='#FF7676',font='{Tw cen mt} 13 ',width=19,height=2,activebackground='#FF7676',cursor='hand2')
+add_user.grid(row=2, column=0, padx=10, pady=10)
+
+
+# Run to pull data from database on start
+query_database()
+
 
 
 
@@ -170,12 +487,20 @@ def choose_color():
     root.configure(background=maicolor[1])
     btnframe.configure(background=maicolor[1])
     frame1.configure(background=maicolor[1])
+    my_tree.tag_configure('evenrow', background=maincolor[1])
     frame1_btn.configure(activebackground=maicolor[1],bg=maicolor[1])
     frame2_btn.configure(activebackground=maicolor[1],bg=maicolor[1])
     frame3_btn.configure(activebackground=maicolor[1],bg=maicolor[1])
     frame4_btn.configure(activebackground=maicolor[1],bg=maicolor[1])
     frame5_btn.configure(activebackground=maicolor[1],bg=maicolor[1])
     button_custom.configure(activebackground=maicolor[1],bg=maicolor[1],border=2)
+    lavender_btn.configure(border=0)
+    peach_btn.configure(border=0)
+    fiery_btn.configure(border=0)
+    azure_btn.configure(border=0)
+    mint_btn.configure(border=0)        
+    gray_btn.configure(border=0)
+    shadow_btn.configure(border=0)
 
 
 def defined_color(color,btncode):
@@ -187,6 +512,7 @@ def defined_color(color,btncode):
     frame3_btn.configure(activebackground=color,bg=color)
     frame4_btn.configure(activebackground=color,bg=color)
     frame5_btn.configure(activebackground=color,bg=color)
+    my_tree.tag_configure('evenrow', background=color)
     
     #border-color
     if btncode==1:

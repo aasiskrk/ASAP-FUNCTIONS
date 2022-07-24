@@ -1,12 +1,15 @@
+from distutils import dir_util
 from tkinter import *
 from PIL import Image,ImageTk
 import sqlite3 as sq
 
+#directory
+dir1='F:/tkn/ASAP/login page/'
 
 #initial setup
 root=Tk()
 root.title('ASAP-LOGIN V-1.0.0'.center(220))
-root.iconbitmap('logo.ico')
+root.iconbitmap(dir1+'logo.ico')
 root.configure(background='#DDC9FF')
 root.maxsize(height=700,width=900)
 root.minsize(height=700,width=900)
@@ -16,12 +19,12 @@ root.geometry('900x700')
 
 
 #image
-myimag=(Image.open('pooza.png'))
+myimag=(Image.open(dir1+'pooza.png'))
 ok=myimag.resize((250,290))
 conimg=ImageTk.PhotoImage(ok)
 my_label=Label(root,image=conimg,bg='#DDC9FF')
 my_label.place(x=100,y=295)
-img1=PhotoImage(file='rec1.png')
+img1=PhotoImage(file=dir1+'rec.png')
 
 #Entry
 frame=LabelFrame(root,padx=25,pady=10,highlightbackground="black", highlightthickness=3,background='white',border=0)
