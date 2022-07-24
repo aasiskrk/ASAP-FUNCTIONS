@@ -1,5 +1,9 @@
+from itertools import count
 from tkinter import *
 from tkinter import ttk
+import sqlite3
+
+
 
 
 #basic tkinter modification
@@ -56,39 +60,137 @@ qr_buttonl= Button(mainframe,text="QR CODE MODULE",borderwidth=2,relief=SOLID,fg
 item_details_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=490,bg="#DDC9FF").place(x=60,y=260)
 item_label= Label(mainframe,text="ITEM DETAILS",font=20,border=1,fg="black",bg="#DDC9FF").place(x=64,y=263)
 
-#stylize the treeview
+
+gross_label=Label(mainframe,text="Gross Amount",font=12,fg="black",bg="#DDC9FF").place(x=64,y=603)
+gross_entrybox=Entry(mainframe,width=20,relief=RAISED).place(x=200,y=609)
+
+discount_label_2=Label(mainframe,text="Discount",font=12,fg="black",bg="#DDC9FF").place(x=64,y=635)
+dicount_entry_2=Entry(mainframe,width=20,relief=RAISED).place(x=200,y=641)
+
+netamount_label=Label(mainframe,text="Net Amount",font=12,fg="black",bg="#DDC9FF").place(x=64,y=658)
+netamount_entry=Entry(mainframe,width=20,relief=RAISED).place(x=200,y=664)
+
+given_amount_label=Label(mainframe,text="Given Amount",font=12,fg="black",bg="#DDC9FF").place(x=64,y=689)
+given_amount_entry=Entry(mainframe,width=20,relief=RAISED).place(x=200,y=695)
+
+change_label=Label(mainframe,text="Change",font=12,fg="black",bg="#DDC9FF").place(x=64,y=711)
+change_entry=Entry(mainframe,width=20,relief=RAISED).place(x=200,y=718)
+
+#database
+
+conn = sqlite3.connect("ASAP.db")
+
+c = conn.cursor() 
+
+#Sir taught to comment but we can use if not exists
+c.execute("""CREATE TABLE if not exists ITEM_DETAILS(  
+    SN integer,
+    Item_Name text,
+    Quantity integer,  
+    Rate integer,
+    Discount integer,
+    Amount integer,
+    Tender integer,
+    Payment_mode text,
+    Bill_no integer
+   
+
+
+)""")
+
+c.execute("""CREATE TABLE if not exists PAST_INVOICE(  
+    Customer_Name text,
+    Transaction_date text,
+    Payment_mode text,  
+    Address text,
+    Bill_no integer
+   
+
+
+)""")
+
+c.execute("""CREATE TABLE if not exists ITEMS_IN_STORE(  
+    Item_Name text,
+    Rate integer
+   
+
+
+)""")
+
+
+
+
+
+
+
+# Add Some Style
 style = ttk.Style()
+
+# Pick A Theme
 style.theme_use('default')
-style.configure("Treeview",background='#D3D3D3',foreground='black',rowheight=25,fieldbackground='#D3D3D3')
-style.map("Treeview",background=[('selected','#347083')])
 
-#create treeviewframe
-tree_frame= Frame(mainframe,width=900,height=330).place(x=85,y=300)
-#scrollbar for treeview
-tree_scroll=Scrollbar(tree_frame).pack(side=RIGHT,fill=Y)
+# Configure the Treeview Colors
+style.configure("Treeview",background="#D3D3D3",foreground="black",rowheight=28,fieldbackground="#D3D3D3",font=4)
+style.configure('Treeview.Heading',font=8)
+# Change Selected Color
+style.map('Treeview',background=[('selected', "#857A8E")])
 
-my_tree=ttk.Treeview(tree_frame,yscrollcommand=tree_scroll.__setattr__, selectmode="extended").pack()
+# Create a Treeview Frame
+tree_frame = Frame(mainframe,width=1000,height=500,background="black")
+tree_frame.place(x=62,y=290)
 
+# Create a Treeview Scrollbar
+tree_scroll = Scrollbar(tree_frame)
+tree_scroll.pack(side=RIGHT, fill=Y)
+
+# Create The Treeview
+my_tree = ttk.Treeview(tree_frame, yscrollcommand=tree_scroll.set, selectmode="extended")
+my_tree.pack()
+
+# Configure the Scrollbar
 tree_scroll.config(command=my_tree.yview)
-my_tree['columns']=("S.N","Particulars","Quality","Rate","Amount")
-my_tree.column("#0",width=120,minwidth=90)
-my_tree.column("S.N",anchor=W,width=20)
-my_tree.column("Particulars",anchor=CENTER,width=80)
-my_tree.column("Quality",anchor=W,width=120)
-my_tree.column("Rate",anchor=W,width=50)
-my_tree.column("Amount",anchor=E,width=90)
 
-my_tree.heading("#0",text="Name",anchor=W)
-my_tree.heading("S.N",text="S.N",anchor=W)
-my_tree.heading("Particulars",text="Particulars",anchor=CENTER)
-my_tree.heading("Quality",text="Quality",anchor=W)
-my_tree.heading("Rate",text="Rate",anchor=W)
-my_tree.heading("Amount",text="Amount",anchor=E)
-
-my_tree.insert(parent='',index='end',iid=0,text="Name",values=(1,"Cupcake",2,40,80))
+my_tree['columns']=("S.N","Particulars","Quantity","Rate","Amount")
+my_tree.column("#0",width=0,stretch=NO)
+my_tree.column("S.N",anchor=CENTER,width=90)
+my_tree.column("Particulars",anchor=W,width=295)
+my_tree.column("Quantity",anchor=W,width=180)
+my_tree.column("Rate",anchor=W,width=180)
+my_tree.column("Amount",anchor=CENTER,width=181)
 
 
+my_tree.tag_configure('oddrow', background="white")
+my_tree.tag_configure('evenrow', background="lightblue")
 
+global count
+count= 0
+
+for record in ITEM_DETAILS:
+    if count % 2 == 0:
+        my_tree.insert(parent='',index='end',iid=count,text='',values=(record[0], record[1], record[2], record[3], record[4], record[5], record[6]), tags=('evenrow',))
+    else:
+        my_tree.insert(parent='',index='end',iid=count,text='', values=(record[0], record[1], record[2], record[3], record[4], record[5], record[6]), tags=('oddrow',))
+        
+    count+=1
+
+#select a record
+def select_rec(e):
+    item_name_entry.delete(0,END)
+    quantity_entry.delete(0,END)
+    rate_entry.delete(0,END)
+    discount_entry.delete(0,END)
+    
+    
+    
+    selected = my_tree.focus()
+    values=my_tree.items(selected,'values')
+    
+    item_name_entry.insert(0,values[1])
+    quantity_entry.insert(0,values[2])
+    rate_entry.insert(0,values[3])
+    discount_entry.insert(0,values[4])
+    
+my_tree.bind("<ButtonRelease-1",select_rec)
 
 insert_item_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=270,bg="#DDC9FF").place(x=1050,y=260)
 insert_item_label= Label(mainframe,text="INSERT ITEM DETAILS",font=20,border=1,fg="black",bg="#DDC9FF").place(x=1053,y=263)
@@ -135,7 +237,18 @@ access_invoice_button=Button(records_frame,text="Access Inovice",font=15).place(
 delete_invoice_button=Button(records_frame,text="Delete Invoice",font=15).place(x=1322,y=250)
 print_invoice_button=Button(records_frame,text="Print Invoice",font=15).place(x=1330,y=300)
 
+#functions for treeview
 
 
+    
+    
+    
+    
+    
+
+
+conn.commit()
+
+conn.close()
 
 root.mainloop()
