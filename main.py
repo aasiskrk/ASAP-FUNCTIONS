@@ -1,125 +1,485 @@
-from itertools import count
+import os
 from tkinter import *
+from tkinter import messagebox
+from datetime import datetime
 from tkinter import ttk
 import sqlite3
+import cv2 as cv
+
+#initial setup
+root=Tk()
+root.title('ASAP-LOGIN V-1.0.0'.center(400))
+root.configure(background='#DDC9FF')
+maincolor='#DDC9FF'
+mainfont='{tw cen mt}'
+width= root.winfo_screenwidth()
+height= root.winfo_screenheight()
+root.geometry("%dx%d" % (width, height))
+root.resizable(True,False)
+
+root.columnconfigure(0,weight=1)
+root.rowconfigure(0,weight=0)
+root.rowconfigure(1,weight=2)
+
+frame1=Frame(root,bg='#DDC9FF')
+frame2=Frame(root,bg='#DDC9FF')
+btnframe = Frame(root,background=maincolor)
+btnframe.grid(row=0,column=0,sticky='nw')
+for frame in (frame1, frame2):
+    frame.grid(row=1,column=0,sticky='nsew',pady=(0,0),padx=0)
+
+
+def show_frame(frame):
+    frame.tkraise()
+    
+
+show_frame(frame1)
+
+
+#btns
+frame1_btn=Button(btnframe,text='Main',command=lambda:show_frame(frame1),font='{tw cen mt} 13',relief='groove',activebackground=maincolor)
+frame1_btn.grid(row=0,column=0,padx=(0,0))
+
+frame2_btn=Button(btnframe,text='invoices',command=lambda:show_frame(frame2),font='{tw cen mt} 13',relief='groove',activebackground=maincolor)
+frame2_btn.grid(row=0,column=1)
+
+
+#frame1:
+#firstrow:
+rf1=LabelFrame(frame1,text="Customer Details",font='{tw cen mt} 20',width=900,height=185,bg='#DDC9FF',border=2,relief=SOLID)
+rf1.place(x=60,y=0)
+
+
+#rf1items
+billLabel=Label(rf1,text='Bill no.:',font=mainfont+' 15',bg='#DDC9FF')
+billLabel.place(x=0,y=0) 
+
+
+billno=12001
+billL=Label(rf1,text=billno,font=mainfont+' 15',bg='#DDC9FF')
+billL.place(x=100,y=0) 
+
+dateLabel=Label(rf1,text='Transaction date:',font=mainfont+' 15',bg='#DDC9FF')
+dateLabel.place(x=0,y=40)
+
+custLabel=Label(rf1,text='Customer name:',font=mainfont+' 15',bg='#DDC9FF')
+custLabel.place(x=0,y=80) 
+
+custNum=Label(rf1,text='Number:',font=mainfont+' 15',bg='#DDC9FF')
+custNum.place(x=0,y=120) 
+
+#rntries:
+custName=Entry(rf1,font=mainfont+' 15',border=0,bg='#DDC9FF')
+custName.place(x=143,y=80)
+Frame(rf1,height=2,width=220,bg='black').place(x=143,y=105)
+
+custNumber=Entry(rf1,font=mainfont+' 15',border=0,bg='#DDC9FF')
+custNumber.place(x=143,y=115)
+Frame(rf1,height=2,width=220,bg='black').place(x=143,y=140)
+
+def nwbill():
+    global billno
+    billno+=1
+    billL.config(text=billno)
+    remove_all()
+    global count
+    count=0
+
+def additemdf(ok):
+    conn = sqlite3.connect('D:/ASAP FUNCTIONS/asapDatabase.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM product where product_id="+ok)
+    global records
+    records = c.fetchall()
+    print(records)
+    global addtp
+    addtp=Toplevel()
+    addtp.title('additem')
+    addtp.config(bg=maincolor)
+    addtp.geometry('230x200')
+    items=LabelFrame(addtp,font=mainfont+' 25',bg=maincolor,text='items')
+    items.grid(row=0,column=0)
+    ire=Label(items,font=mainfont,bg=maincolor,text='Product_id:')
+    ire.grid(row=0,column=0)
+    iremcode=Label(items,font=mainfont,bg=maincolor,text=records[0][0])
+    iremcode.grid(row=0,column=1)
+
+    irem=Label(items,font=mainfont,bg=maincolor,text='Product_name:')
+    irem.grid(row=1,column=0)
+    tremname=Label(items,font=mainfont,bg=maincolor,text=records[0][1])
+    tremname.grid(row=1,column=1)
+
+    iremc=Label(items,font=mainfont,bg=maincolor,text='rate:')
+    iremc.grid(row=2,column=0)
+    rate=Label(items,font=mainfont,bg=maincolor,text=records[0][2])
+    rate.grid(row=2,column=1)
+
+    iremco=Label(items,font=mainfont,bg=maincolor,text='quantity:')
+    iremco.grid(row=3,column=0)
+
+    global quant
+
+
+    quant=Entry(items)
+    quant.grid(row=3,column=1)
+
+    aditembtn=Button(addtp,text='add item',command=add_record)
+    aditembtn.grid(row=1,column=0,columnspan=2)
+def cammerld():
+    img= cv.VideoCapture(0,cv.CAP_DSHOW)
+    while True:
+        istrue, frame = img.read()
+        #ractangle
+        cv.rectangle(frame,(150,120),(500,450),(0,0,255),thickness=3)
+
+        #qrcode scanner
+        d=cv.QRCodeDetector()
+        val,point,straight_qrcode=d.detectAndDecode(frame)
+        
+        #printing the value and closing the camera
+        if val>'':
+            print(val,'ok')
+            additemdf(val)
+            break  
+        cv.imshow('webcam',frame)
+
+        #closing the camera
+        if cv.waitKey(1) & 0xFF==ord('c'):
+            break
+    img.release()
+    cv.destroyAllWindows()
+
+qr_code=Button(frame1,text="QR CODE MODULE",font=mainfont+' 25',border=2,relief=SOLID,bg='#DDC9FF',command=cammerld)
+qr_code.place(x=1000,y=15,height=170,width=350)
+
+def time():
+    date=datetime.now().strftime("%m/%d/%Y,%H:%M:%S %p")
+    dalabel.config(text=date)
+    dalabel.after(1000,time)
+
+dalabel=Label(rf1,font=mainfont+' 15',bg='#DDC9FF')
+dalabel.place(x=140,y=40)
+time()
+
+
+rf2=Frame(frame1,bg='white',width=900,height=400,relief=SOLID,border=2)
+rf2.place(x=60,y=205)
+
+frameline1=Frame(frame1,bg='black',height=2,width=900)
+frameline1.place(x=60,y=604)
+frameline2=Frame(frame1,bg='black',height=401,width=2)
+frameline2.place(x=960,y=205)
+frameline3=Frame(frame1,bg='black',height=401,width=2)
+frameline3.place(x=942,y=205)
+
+
+#style#
+style = ttk.Style()
+
+# Pick A Theme
+style.theme_use('default')
+
+# Configure the Treeview Colors
+style.configure("Treeview",bg="#D3D3D3",foreground="black",rowheight=30,fieldbackground="#D3D3D3",font='{tw cen mt}')
+
+
+style.configure("Treeview.Heading", font=('{tw cen mt} 15'),background='#DDC9FF',border=2)
+# Change Selected Color
+style.map('Treeview',
+	background=[('selected', "#FF8080")])
+#treesssefaod
+tree_prod = Frame(rf2)
+tree_prod.place(x=0,y=0)
+
+# Create a Treeview Scrollbar
+scroll_prod = Scrollbar(tree_prod)
+scroll_prod.pack(side=RIGHT, fill=Y)
+
+# Create The Treeview
+prod_tree = ttk.Treeview(tree_prod, yscrollcommand=scroll_prod.set, selectmode="extended")
+prod_tree.pack()
+
+# Configure the Scrollbar
+scroll_prod.config(command=prod_tree.yview)
+
+# Define Our Columns
+prod_tree['columns'] = ("S.no", "product_name", "rate", "quantity",'total')
+
+# Format Our Columns
+prod_tree.column("#0", width=0, stretch=NO)
+prod_tree.column("S.no", anchor=CENTER, width=150)
+prod_tree.column("product_name", anchor=CENTER, width=250)
+prod_tree.column("rate", anchor=CENTER, width=150)
+prod_tree.column("quantity", anchor=CENTER, width=150)
+prod_tree.column("total", anchor=CENTER, width=180)
+
+
+
+# Create Headings
+prod_tree.heading("#0", text="", anchor=CENTER)
+prod_tree.heading("S.no", text="S.no", anchor=CENTER)
+prod_tree.heading("product_name", text="Particulars", anchor=CENTER)
+prod_tree.heading("rate", text="Rate", anchor=CENTER)
+prod_tree.heading("quantity", text="Quantity", anchor=CENTER)
+prod_tree.heading("total", text="Amount", anchor=CENTER)
+
+
+#insertitem:
+rf4=LabelFrame(frame1,text="Insert Item",width=350,height=415,bg='#DDC9FF',font='{tw cen mt} 20',relief=SOLID)
+rf4.place(x=1000,y=189)
 
 
 
 
-#basic tkinter modification
-root = Tk()
-root.title("ASAP")
-root.state('zoomed')
-# root.iconbitmap("logo.ico")
-root.geometry("1920x1080")
+addItem=Label(rf4,text='Product code:',font=mainfont,bg='#DDC9FF')
+addItem.place(x=0,y=10)
 
-root.minsize(width=500,height=500)
-root.maxsize(width=1920,height=1080)
+addEnt=Entry(rf4,font=mainfont+' 15',border=0,bg='#DDC9FF')
+addEnt.place(x=120,y=11)
+addframe=Frame(rf4,height=2,width=200,bg='black')
+addframe.place(x=120,y=35)
 
-#tabs part
+# tender_insert=Label(rf4,text='Tender:',font=mainfont,bg='#DDC9FF')
+# tender_insert.place(x=0,y=50)
 
-#Main tab elements
-tabs= ttk.Notebook(root)
-tabs.pack()
+# tender_entry=Entry(rf4,font=mainfont+' 15',border=0,bg='#DDC9FF')
+# tender_entry.place(x=120,y=51)
+# addframe2=Frame(rf4,height=2,width=200,bg='black')
+# addframe2.place(x=120,y=75)
+count=1
 
-mainframe= Frame(tabs,width=1920,height=1080,bg="#D9D9D9")
-records_frame= Frame(tabs,width=1920,height=1080,bg="#D9D9D9")
+def add_record():
+        prod_tree.tag_configure('evenrow', background='light blue')
+        prod_tree.tag_configure('oddrow', background='gray')
+        
+        global count
+        
+        if count % 2 == 0:
+            prod_tree.insert(parent='', index='end', iid=count, text="", values=(count, records[0][1],records[0][2],quant.get(),records[0][2]*int(quant.get()) ), tags=('evenrow',))
+        else:
+            prod_tree.insert(parent='', index='end', iid=count, text="", values=(count, records[0][1],records[0][2],quant.get(),records[0][2]*int(quant.get()) ), tags=('oddrow',))
 
+        count += 1
+        addtp.destroy()
+        addEnt.delete(0,END)
 
-# bg=PhotoImage(file="background_ASAP.png")
-# Background=Label(mainframe,image=bg)
-# Background.place(x=0,y=0,relwidth=1,relheight=1)
-
-mainframe.pack(fill=BOTH,expand=1)
-records_frame.pack(fill=BOTH,expand=1)
-
-tabs.add(mainframe,text="Main")
-tabs.add(records_frame,text="Records")
-
-#Elements inside tab
-customer_detail_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=210,bg="#DDC9FF").place(x=60,y=30)
-customer_label= Label(mainframe,text="CUSTOMER DETAILS",font=20,border=1,fg="black",bg="#DDC9FF").place(x=64,y=33)
-
-bill_no_label=Label(mainframe,text="Bill no.",font=7,bg="#DDC9FF").place(x=105,y=80)
-bill_no_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=85,width=150,height=23)
-
-date_label=Label(mainframe,text="Transaction Date",font=7,bg="#DDC9FF").place(x=105,y=110)
-date_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=115,width=150,height=23)
-
-bill_to_label=Label(mainframe,text="Bill To",font=7,bg="#DDC9FF").place(x=105,y=140)
-bill_to_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=145,width=150,height=23)
-
-address_label=Label(mainframe,text="Address",font=7,bg="#DDC9FF").place(x=105,y=170)
-address_entry=Entry(mainframe,width=20,relief=RAISED).place(x=280,y=175,width=150,height=23)
-
-
-
-# qrcode_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=210,bg="#857A8E").place(x=1050,y=30)
-qr_buttonl= Button(mainframe,text="QR CODE MODULE",borderwidth=2,relief=SOLID,fg="black",bg="#857A8E",width=59,height=13).place(x=1050,y=30)
-
-item_details_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=950,height=490,bg="#DDC9FF").place(x=60,y=260)
-item_label= Label(mainframe,text="ITEM DETAILS",font=20,border=1,fg="black",bg="#DDC9FF").place(x=64,y=263)
-
-
-gross_label=Label(mainframe,text="Gross Amount",font=12,fg="black",bg="#DDC9FF").place(x=64,y=603)
-gross_entrybox=Entry(mainframe,width=20,relief=RAISED).place(x=200,y=609)
-
-discount_label_2=Label(mainframe,text="Discount",font=12,fg="black",bg="#DDC9FF").place(x=64,y=635)
-dicount_entry_2=Entry(mainframe,width=20,relief=RAISED).place(x=200,y=641)
-
-netamount_label=Label(mainframe,text="Net Amount",font=12,fg="black",bg="#DDC9FF").place(x=64,y=658)
-netamount_entry=Entry(mainframe,width=20,relief=RAISED).place(x=200,y=664)
-
-given_amount_label=Label(mainframe,text="Given Amount",font=12,fg="black",bg="#DDC9FF").place(x=64,y=689)
-given_amount_entry=Entry(mainframe,width=20,relief=RAISED).place(x=200,y=695)
-
-change_label=Label(mainframe,text="Change",font=12,fg="black",bg="#DDC9FF").place(x=64,y=711)
-change_entry=Entry(mainframe,width=20,relief=RAISED).place(x=200,y=718)
-
-#database
-
-conn = sqlite3.connect("ASAP.db")
-
-c = conn.cursor() 
-
-#Sir taught to comment but we can use if not exists
-c.execute("""CREATE TABLE if not exists ITEM_DETAILS(  
-    SN integer,
-    Item_Name text,
-    Quantity integer,  
-    Rate integer,
-    Discount integer,
-    Amount integer,
-    Tender integer,
-    Payment_mode text,
-    Bill_no integer
-   
-
-
-)""")
-
-c.execute("""CREATE TABLE if not exists PAST_INVOICE(  
-    Customer_Name text,
-    Transaction_date text,
-    Payment_mode text,  
-    Address text,
-    Bill_no integer
-   
-
-
-)""")
-
-c.execute("""CREATE TABLE if not exists ITEMS_IN_STORE(  
-    Item_Name text,
-    Rate integer
-   
-
-
-)""")
+        total_amt.config(text=total())
 
 
 
 
+
+
+
+
+
+
+
+
+
+def additems():
+    if addEnt.get()!='':
+        try:
+            conn = sqlite3.connect('D:/ASAP FUNCTIONS/asapDatabase.db')
+            c = conn.cursor()
+            c.execute("SELECT * FROM product where product_id="+addEnt.get())
+            global records
+            records = c.fetchall()
+            print(records)
+            global addtp
+            addtp=Toplevel()
+            addtp.title('additem')
+            addtp.config(bg=maincolor)
+            addtp.geometry('290x200')
+            items=LabelFrame(addtp,font=mainfont+' 25',bg=maincolor,text='items')
+            items.place(x=15,y=10)
+            ire=Label(items,font=mainfont,bg=maincolor,text='Product_id:')
+            ire.grid(row=0,column=0)
+            iremcode=Label(items,font=mainfont,bg=maincolor,text=records[0][0])
+            iremcode.grid(row=0,column=1)
+
+            irem=Label(items,font=mainfont,bg=maincolor,text='Product_name:')
+            irem.grid(row=1,column=0)
+            tremname=Label(items,font=mainfont,bg=maincolor,text=records[0][1])
+            tremname.grid(row=1,column=1)
+
+            iremc=Label(items,font=mainfont,bg=maincolor,text='rate:')
+            iremc.grid(row=2,column=0)
+            rate=Label(items,font=mainfont,bg=maincolor,text=records[0][2])
+            rate.grid(row=2,column=1)
+
+            iremco=Label(items,font=mainfont,bg=maincolor,text='quantity:')
+            iremco.grid(row=3,column=0)
+            
+            global quant
+
+
+            quant=Entry(items)
+            quant.grid(row=3,column=1)
+            
+            aditembtn=Button(addtp,text='add item',command=add_record)
+            aditembtn.place(x=100,y=170)
+
+        except:
+            addtp.destroy()
+            messagebox.showerror('warning!!','Item not found!!')
+    else:
+        messagebox.showerror('warning!!','Please enter a valid input!!')
+
+
+
+
+
+
+
+addBtn=Button(rf4,text='ADD',command=additems,bg='#DDC9FF')
+addBtn.place(x=120,y=100,width=200)
+
+
+
+conn = sqlite3.connect('D:/ASAP FUNCTIONS/asapDatabase.db')
+
+# Create a cursor instance
+c = conn.cursor()
+
+#Create Table
+c.execute("""CREATE TABLE if not exists invoices (
+	invoice_no integer,
+	customer_name text,
+    customer_num integer,
+	items text,
+	total integer,
+    time text
+    )
+	""")
+conn.commit()
+conn.close()
+
+
+
+
+def remove_all():
+    for record in prod_tree.get_children():
+            prod_tree.delete(record)
+    custName.delete(0,END)
+    custNumber.delete(0,END)
+    
+def remove_one():
+    x=prod_tree.selection()[0]
+    prod_tree.delete(x)
+    
+
+def nwbill():
+    global billno
+    billno+=1
+    billL.config(text=billno)
+    remove_all()
+    addToDb.config(state=NORMAL)
+    global count
+    count=1
+    total_amt.config(text='0')
+
+
+def total():
+    no=prod_tree.get_children()
+    a=0
+    for child in no:
+        no=prod_tree.item(child,'value')
+        a+=int(no[4])
+    return a
+
+
+
+
+
+def allval(tree):
+    no=tree.get_children()
+    a=[]
+    for child in no:
+        a.append(tree.item(child,'value'))
+    return a
+
+
+def savedb():
+    if custName.get()!='':
+        if len(custNumber.get())==10:
+            conn=sqlite3.connect('D:/ASAP FUNCTIONS/asapDatabase.db')
+            c = conn.cursor()
+            c.execute("INSERT INTO invoices VALUES (:invoice_no, :customer_name, :customer_num, :items, :total,:time)", 
+                {
+                'invoice_no':billno,
+                'customer_name':custName.get(),
+                'customer_num':int(custNumber.get()),
+                'items':str(allval(prod_tree)),
+                'total':total(),
+                'time':datetime.now().strftime("%m/%d/%Y,%H:%M:%S %p")
+                })
+            messagebox.showinfo('Success!','Added the bill into database sucessfully!')
+            conn.commit()
+            conn.close()
+            addToDb.config(state=DISABLED)
+            Print_bill.config(state=NORMAL)
+            update_table()
+
+
+
+        else:
+            messagebox.showwarning('Warning!!','Invalid customer contact Number!!')
+    else:
+        messagebox.showwarning('Warning!!','Invalid Customer Name!!')
+ 
+
+
+newbill=Button(rf4,text='newbill',command=nwbill,bg='pink',relief=SOLID)
+newbill.place(x=15,y=140,width=100,height=50)
+
+
+
+addToDb=Button(rf4,text='SAVE INVOICE',command=savedb,bg='#DDC9FF')
+addToDb.place(x=120,y=125,width=200)
+
+
+total_amount=Label(frame1,text="Total Amount:",bg='#DDC9FF',font=mainfont+' 18')
+total_amount.place(x=700,y=610)
+
+total_amt=Label(frame1,bg='#DDC9FF',text='0',font=mainfont+' 18')
+total_amt.place(x=850,y=610)
+
+# tender_label=Label(frame1,text="Tender:",bg='#DDC9FF',font=mainfont+' 18')
+# tender_label.place(x=700,y=650)
+
+# change_label=Label(frame1,text='Change:',bg='#DDC9FF',font=mainfont+' 18')
+# change_label.place(x=700,y=690)
+
+
+def query_database3():
+	# Create a database or connect to one that exists
+	conn = sqlite3.connect('D:/ASAP FUNCTIONS/asapDatabase.db')
+
+	# Create a cursor instance
+	c = conn.cursor()
+
+	c.execute("SELECT *,oid FROM invoices")
+	records = c.fetchall()
+	#print(records)
+	# Add our data to the screen
+	global cont
+	cont = 0
+
+	for record in records:
+		if cont % 2 == 0:
+			my_tree.insert(parent='', index='end', iid=cont, text='', values=(record[0], record[1], record[2], record[4], record[5],record[6]), tags=('evenrow',))
+		else:
+			my_tree.insert(parent='', index='end', iid=cont, text='', values=(record[0], record[1], record[2], record[4], record[5],record[6]), tags=('oddrow',))
+		# increment conter
+		cont += 1
+
+
+	# Commit changes
+	conn.commit()
+
+	# Close our connection
+	conn.close()
 
 
 
@@ -130,14 +490,28 @@ style = ttk.Style()
 style.theme_use('default')
 
 # Configure the Treeview Colors
-style.configure("Treeview",background="#D3D3D3",foreground="black",rowheight=28,fieldbackground="#D3D3D3",font=4)
-style.configure('Treeview.Heading',font=8)
+style.configure("Treeview",
+	background="#D3D3D3",
+	foreground="black",
+	rowheight=50,
+	fieldbackground="#D3D3D3",
+    font='{tw cen mt}')
+
+
+style.configure("Treeview.Heading", font=('{tw cen mt} 15'),
+    background='white',
+    border=2
+)
 # Change Selected Color
-style.map('Treeview',background=[('selected', "#857A8E")])
+style.map('Treeview',
+	background=[('selected', "#FF8080")])
+
+#frame for tt
+
 
 # Create a Treeview Frame
-tree_frame = Frame(mainframe,width=1000,height=500,background="black")
-tree_frame.place(x=62,y=290)
+tree_frame = LabelFrame(frame2,text="PAST INVOICES",bg='#DDC9FF',font='{tw cen mt} 20')
+tree_frame.grid(row=0,column=0)
 
 # Create a Treeview Scrollbar
 tree_scroll = Scrollbar(tree_frame)
@@ -150,105 +524,111 @@ my_tree.pack()
 # Configure the Scrollbar
 tree_scroll.config(command=my_tree.yview)
 
-my_tree['columns']=("S.N","Particulars","Quantity","Rate","Amount")
-my_tree.column("#0",width=0,stretch=NO)
-my_tree.column("S.N",anchor=CENTER,width=90)
-my_tree.column("Particulars",anchor=W,width=295)
-my_tree.column("Quantity",anchor=W,width=180)
-my_tree.column("Rate",anchor=W,width=180)
-my_tree.column("Amount",anchor=CENTER,width=181)
+# Define Our Columns
+my_tree['columns'] = ("Billno.", "Customer name", "number", "total",'date')
+
+# Format Our Columns
+my_tree.column("#0", width=0, stretch=NO)
+my_tree.column("Billno.", anchor=W, width=250)
+my_tree.column("Customer name", anchor=W, width=250)
+my_tree.column("number", anchor=CENTER, width=180)
+my_tree.column("total", anchor=CENTER, width=180)
+my_tree.column("date", anchor=CENTER, width=200)
 
 
+
+# Create Headings
+my_tree.heading("#0", text="", anchor=W)
+my_tree.heading("Billno.", text="Billno.", anchor=W)
+my_tree.heading("Customer name", text="Customer name", anchor=W)
+my_tree.heading("number", text="Number", anchor=CENTER)
+my_tree.heading("total", text="Total", anchor=CENTER)
+my_tree.heading("date", text="Date", anchor=CENTER)
+
+
+
+# Create Striped Row Tags
 my_tree.tag_configure('oddrow', background="white")
-my_tree.tag_configure('evenrow', background="lightblue")
+my_tree.tag_configure('evenrow', background=maincolor)
 
-global count
-count= 0
+query_database3()
 
-for record in ITEM_DETAILS:
-    if count % 2 == 0:
-        my_tree.insert(parent='',index='end',iid=count,text='',values=(record[0], record[1], record[2], record[3], record[4], record[5], record[6]), tags=('evenrow',))
-    else:
-        my_tree.insert(parent='',index='end',iid=count,text='', values=(record[0], record[1], record[2], record[3], record[4], record[5], record[6]), tags=('oddrow',))
-        
-    count+=1
+def remove_one_past():
+    msg=messagebox.askquestion("Warning!!", "Are you sure you want to delete following product?",icon = 'warning')
 
-#select a record
-def select_rec(e):
-    item_name_entry.delete(0,END)
-    quantity_entry.delete(0,END)
-    rate_entry.delete(0,END)
-    discount_entry.delete(0,END)
-    
-    
-    
-    selected = my_tree.focus()
-    values=my_tree.items(selected,'values')
-    
-    item_name_entry.insert(0,values[1])
-    quantity_entry.insert(0,values[2])
-    rate_entry.insert(0,values[3])
-    discount_entry.insert(0,values[4])
-    
-my_tree.bind("<ButtonRelease-1",select_rec)
+    if msg=='yes':
 
-insert_item_frame= Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=270,bg="#DDC9FF").place(x=1050,y=260)
-insert_item_label= Label(mainframe,text="INSERT ITEM DETAILS",font=20,border=1,fg="black",bg="#DDC9FF").place(x=1053,y=263)
+    # Grab the record number
 
-item_name_label=Label(mainframe,text="Item Name",font=7,bg="#DDC9FF").place(x=1100,y=300)
-item_name_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=305,width=150,height=23)
+        selected = my_tree.focus()
 
-quantity_label=Label(mainframe,text="Quantity",font=7,bg="#DDC9FF").place(x=1100,y=330)
-quantity_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=335,width=150,height=23)
+        dosi = my_tree.item(selected,'values')
+        print(dosi)
 
-rate_label=Label(mainframe,text="Rate",font=7,bg="#DDC9FF").place(x=1100,y=360)
-rate_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=365,width=150,height=23)
+        # ok=int(selected)+1
 
-discount_label=Label(mainframe,text="Discount",font=7,bg="#DDC9FF").place(x=1100,y=390)
-discount_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=395,width=150,height=23)
+        print(dosi[5])
 
-add_item_btn= Button(mainframe,text="Add Item",font=5).place(x=1300,y=440)
-edit_item_btn= Button(mainframe,text="Edit Item",font=5).place(x=1300,y=480)
+        conn= sqlite3.connect('D:/ASAP FUNCTIONS/asapDatabase.db')
+
+        c=conn.cursor()
+
+        c.execute('delete from invoices where oid ='+dosi[5])
+
+        print('success','deleted')
+
+        conn.commit()
+
+        conn.close()
+
+        update_table()
 
 
-print_frame=Frame(mainframe,borderwidth=2,relief=SOLID,width=420,height=210,bg="#DDC9FF").place(x=1050,y=540)
-tender_label=Label(mainframe,text="Tender",font=7,bg="#DDC9FF").place(x=1100,y=560)
-tender_entry=Entry(mainframe,width=30,relief=RAISED).place(x=1250,y=565,width=150,height=23)
 
-payment_options=["Cash","Card"]
-payment_option_label= Label(mainframe,text="Payment Option",font=7,bg="#DDC9FF").place(x=1100,y=605 )
-payment_combo= ttk.Combobox(mainframe,value=payment_options,width=27)
-payment_combo.current(0)
-payment_combo.place(x=1250,y=610,width=150,height=23)
-
-store_invoice_button = Button(mainframe,text="STORE INVOICE",font= 15).place(x=1090,y=680)
-
-print_invoice_button = Button(mainframe,text="PRINT INVOICE",font= 15).place(x=1270,y=680)
-
-# payment_combo.bind("<<>>")
-
-#record tab elements
-
-past_inovice_label= Label(records_frame,text="Past Invoice History",font=20,border=1,relief=RAISED,fg="black",bg='#DDC9FF').place(x=680,y=0)
-
-crud_frame=Frame(records_frame,borderwidth=2,relief=SOLID,width=300,height=320,bg='#DDC9FF').place(x=1232,y=140)
-
-access_invoice_button=Button(records_frame,text="Access Inovice",font=15).place(x=1320,y=200)
-delete_invoice_button=Button(records_frame,text="Delete Invoice",font=15).place(x=1322,y=250)
-print_invoice_button=Button(records_frame,text="Print Invoice",font=15).place(x=1330,y=300)
-
-#functions for treeview
-
-
-    
-    
-    
-    
-    
+frame_commands=LabelFrame(frame2,text='Commands',bg='#DDC9FF',font='{tw cen mt} 20',width=200,height=560)
+frame_commands.place(x=1100,y=0)
+remove_one_button_past_invoices=Button(frame_commands,text='Remove Selected',command=remove_one_past,bg='#DDC9FF')
+remove_one_button_past_invoices.place(x=50,y=20)
+def printbill():
+    f=open('D:/ASAP FUNCTIONS/tempf.txt','w')
+    f.write('     ASAP Super Store     \n')
+    f.write('   Anamnager Kathmandu     \n')
+    f.write('Bill no:')
+    f.write(str(billno))
+    f.write('\ncustomer name:')
+    f.write(str(custName.get()))
+    f.write('\ncustomer no:')
+    f.write(str(custNumber.get()))
+    f.write('\npayment mode: cash    \n')
+    f.write('*******************************\n')
+    f.write('sn   Items   rate qty Amount\n')
+    f.write('******************************\n')
+    for i in allval(prod_tree): 
+        f.write(str(i).replace('(','').replace(')','').replace("'","").replace(',','  '))
+        f.write('\n')
+    f.write('******************************\n')
+    f.write('               total:')
+    f.write(str(total()))
+    f.write('\n******************************\n')
+    f.write('thank you for shopping in ASAP \n super store!!\n')
+    f.write('!!See you Again!!')
+    f.close()
+    os.startfile('D:/ASAP FUNCTIONS/tempf.txt','print')
 
 
-conn.commit()
+def update_table():
+    for record in my_tree.get_children():
+        my_tree.delete(record)
+    query_database3()
 
-conn.close()
+Print_bill=Button(rf4,text="PRINT BILL",bg='#DDC9FF',command=printbill)
+Print_bill.place(x=120,y=150,width=200)    
+Print_bill.config(state=DISABLED)
+
+remove_selected=Button(rf4,text='REMOVE SELECTED',bg='#DDC9FF',command=remove_one)
+remove_selected.place(x=120,y=175,width=200)
+
+remove_all_button=Button(rf4,text='REMOVE ALL',bg='#DDC9FF',command=remove_all)
+remove_all_button.place(x=120,y=200,width=200)
 
 root.mainloop()

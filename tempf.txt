@@ -1,0 +1,16 @@
+     ASAP Super Store     
+   Anamnager Kathmandu     
+Bill no:12002
+customer name:suyou
+customer no:1234567890
+payment mode: cash    
+*******************************
+sn   Items   rate qty Amount
+******************************
+1   waiwai   25   2   50
+******************************
+               total:50
+******************************
+thank you for shopping in ASAP 
+ super store!!
+!!See you Again!!
